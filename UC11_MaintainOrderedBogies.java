@@ -1,32 +1,49 @@
-import java.util.TreeSet;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class UC11_MaintainOrderedBogies {
+
+public class UseCase11TrainConsistMgmnt {
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("=== Train Consist Management App ===");
-        System.out.println("UC11: Maintain Ordered Bogie IDs (TreeSet & SortedSet)");
-        System.out.println("---------------------------------------------");
+        System.out.println("=========================================");
+        System.out.println("UC11 - Validate Train ID and Cargo Code");
+        System.out.println("=========================================\n");
 
-        TreeSet<String> trainConsist = new TreeSet<>();
+        // ---- ACCEPT INPUT ---- [cite: 21, 24]
+        System.out.print("Enter Train ID (Format: TRN-1234): ");
+        String trainId = scanner.nextLine();
 
-        trainConsist.add("BG104");
-        trainConsist.add("BG102");
-        trainConsist.add("BG101");
-        trainConsist.add("BG103");
-        trainConsist.add("BG105");
+        System.out.print("Enter Cargo Code (Format: PET-AB): ");
+        String cargoCode = scanner.nextLine();
 
-        System.out.println("\nBogie IDs added: BG104, BG102, BG101, BG103, BG105");
-        System.out.println("\nBogie IDs in sorted order (TreeSet):");
-        for (String id : trainConsist) {
-            System.out.println("  -> " + id);
-        }
+        // ---- DEFINE REGEX RULES ---- [cite: 38, 39]
+        // TRN- followed by exactly four digits
+        String trainIdRegex = "TRN-\\d{4}"; 
+        // PET- followed by exactly two uppercase letters
+        String cargoCodeRegex = "PET-[A-Z]{2}"; 
 
-        System.out.println("\nFirst (lowest): " + trainConsist.first());
-        System.out.println("Last (highest): " + trainConsist.last());
+        // ---- COMPILE PATTERNS ---- [cite: 25, 40]
+        Pattern trainIdPattern = Pattern.compile(trainIdRegex);
+        Pattern cargoCodePattern = Pattern.compile(cargoCodeRegex);
 
-        System.out.println("\nTotal bogies in consist: " + trainConsist.size());
-        System.out.println("---------------------------------------------");
-        System.out.println("Program continues...");
+        // ---- CREATE MATCHERS AND VALIDATE ---- [cite: 26, 41, 42]
+        Matcher trainIdMatcher = trainIdPattern.matcher(trainId);
+        Matcher cargoCodeMatcher = cargoCodePattern.matcher(cargoCode);
+
+        // matches() checks if the entire input matches the pattern [cite: 34, 57]
+        boolean isTrainIdValid = trainIdMatcher.matches();
+        boolean isCargoCodeValid = cargoCodeMatcher.matches();
+
+        // ---- DISPLAY VALIDATION RESULTS ---- [cite: 43, 50]
+        System.out.println("\nValidation Results:");
+        System.out.println("Train ID Valid: " + isTrainIdValid);
+        System.out.println("Cargo Code Valid: " + isCargoCodeValid);
+
+        System.out.println("\nUC11 validation completed...");
+        
+        scanner.close();
     }
 }
